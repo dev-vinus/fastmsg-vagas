@@ -8,21 +8,6 @@
 <body>
 
   <div class="container">
-    <div class="block">
-      <h2>Mensagem Inicial:</h2>
-      <textarea id="input-msg-start">🙏 Antes de qualquer coisa, gostaríamos muito de agradecer pelo interesse em integrar à nossa equipe.
-
-💻 Para cadastro de currículos somente pelo nosso site: www.grupobarralcool.com.br/vagas. No portal informamos os requisitos da vaga e benefícios.
-
-⚠️ Com o cadastro no site e novas vagas abertas, nosso time de RH realiza a busca em nosso banco de dados. Logo, se o currículo estiver cadastrado, as chances em visualizarmos e entrarmos em contato será maior.
-
-📢 Em tempo, informamos que temos vagas disponíveis:</textarea> 
-    </div>
-
-    <div class="block">
-      <h2>Mensagem Final:</h2>
-      <textarea id="input-msg-end">Das vagas acima qual gostaria de se candidatar?</textarea> 
-    </div>
 
     <div class="block">
       <h2>Cole o HTML aqui:</h2>
@@ -44,19 +29,17 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
 
-        const msgStart = document.getElementById('input-msg-start').value;
-        const msgEnd = document.getElementById('input-msg-end').value;
-
-        if (!html || !msgStart || !msgEnd) {
+        if (!html) {
             alert('Por favor, preencha todos os campos.');
             return;
         }
 
-        localStorage.setItem('msgStart', msgStart);
-        localStorage.setItem('msgEnd', msgEnd);
-
         const linhas = doc.querySelectorAll('tr.an-linha-grid');
-        let textoVagas = msgStart + '\n\n';
+ let textoVagas = '🙏 Antes de qualquer coisa, gostaríamos muito de agradecer pelo interesse em integrar a nossa equipe.\n\n'
++ '💻 O cadastro de currículos é realizado exclusivamente pelo nosso site: www.grupobarralcool.com.br/vagas. No portal você encontra os requisitos das vagas e os benefícios oferecidos.\n\n'
++ '⚠️ Ao realizar o cadastro no site, sempre que houver novas vagas, nosso time de RH fará a busca no banco de dados. Assim, se o seu currículo estiver atualizado e cadastrado, as chances de visualizarmos e entrarmos em contato serão maiores.\n\n'
++ '📢 No momento, temos vagas disponíveis:' + '\n\n';
+
 
         let contador = 1;
 
@@ -74,7 +57,7 @@
             }
         });
 
-        textoVagas += '\n' + msgEnd;
+        textoVagas += '\n' + 'Qual das vagas acima qual gostaria de se candidatar?';
         document.getElementById('mensagem').value = textoVagas;
     }
 
