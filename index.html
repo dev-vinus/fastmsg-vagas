@@ -40,53 +40,50 @@
 
 <script>
     function extrairVagas() {
-      const html = document.getElementById('inputHTML').value;
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
+        const html = document.getElementById('inputHTML').value;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
 
-      const msgStart = document.getElementById('input-msg-start').value;
-      const msgEnd = document.getElementById('input-msg-end').value;
+        const msgStart = document.getElementById('input-msg-start').value;
+        const msgEnd = document.getElementById('input-msg-end').value;
 
-      if (!html || !msgStart || !msgEnd) {
-        alert('Por favor, preencha todos os campos.');
-        return;
-      }
-
-      // Salvar no localStorage
-      localStorage.setItem('msgStart', msgStart);
-      localStorage.setItem('msgEnd', msgEnd);
-      
-
-      const linhas = doc.querySelectorAll('tr.an-linha-grid');
-      let textoVagas = msgStart + '\n\n';
-
-      let contador = 1;
-
-      linhas.forEach(linha => {
-        let descVaga = linha.querySelector('.an-coluna-DESVAG')?.textContent.trim() || '';
-        let numVagasRaw = linha.querySelector('.an-coluna-NUMVAG')?.textContent.trim() || '';
-
-        let numVagas = numVagasRaw.replace(/Qtd:\s*/i, '').replace(/[^\d]/g, '');
-        descVaga = descVaga.replace(/🔶/g, '').trim();
-
-        if (descVaga && numVagas !== '') {
-          textoVagas += `🔶 ${contador}. ${descVaga} (${numVagas})\n`;
-          contador++;
+        if (!html || !msgStart || !msgEnd) {
+            alert('Por favor, preencha todos os campos.');
+            return;
         }
-      });
 
-      textoVagas += '\n' + msgEnd;
-      document.getElementById('mensagem').value = textoVagas;
+        localStorage.setItem('msgStart', msgStart);
+        localStorage.setItem('msgEnd', msgEnd);
+
+        const linhas = doc.querySelectorAll('tr.an-linha-grid');
+        let textoVagas = msgStart + '\n\n';
+
+        let contador = 1;
+
+        linhas.forEach(linha => {
+            const colunas = linha.querySelectorAll('td');
+
+            const descricao = colunas[1]?.textContent.replace(/🔶/g, '').trim() || '';
+            const numeroVagas = colunas[6]?.textContent.replace(/[^\d]/g, '') || '';
+
+            if (descricao && numeroVagas !== '0') {
+                textoVagas += `🔶 ${contador}. ${descricao} (${numeroVagas})\n`;
+                contador++;
+            }
+        });
+
+        textoVagas += '\n' + msgEnd;
+        document.getElementById('mensagem').value = textoVagas;
     }
 
     function copiarTexto() {
-      const mensagem = document.getElementById('mensagem');
-      mensagem.select();
-      mensagem.setSelectionRange(0, 99999);
-      navigator.clipboard.writeText(mensagem.value);
-      alert('Texto copiado para a área de transferência!');
+        const mensagem = document.getElementById('mensagem');
+        mensagem.select();
+        navigator.clipboard.writeText(mensagem.value);
+        alert('Texto copiado para a área de transferência!');
     }
 </script>
+
 
 </body>
 </html>
