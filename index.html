@@ -41,6 +41,16 @@
       const msgStart = document.getElementById('input-msg-start').value;
       const msgEnd = document.getElementById('input-msg-end').value;
 
+      if (!html || !msgStart || !msgEnd) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+      }
+
+      // Salvar no localStorage
+      localStorage.setItem('msgStart', msgStart);
+      localStorage.setItem('msgEnd', msgEnd);
+      
+
       const linhas = doc.querySelectorAll('tr.an-linha-grid');
       let textoVagas = msgStart + '\n\n';
 
