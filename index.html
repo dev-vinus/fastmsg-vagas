@@ -3,14 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <title>Extrair Vagas</title>
-  <link rel="stylesheet" href="styles.css" /> <!-- Conectando o Style -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <div class="container">
     <div class="block">
+      <h2>Mensagem Inicial:</h2>
+      <textarea id="input-msg-start">Antes de tudo, obrigado pelo interesse em se integrar à equipe, vagas disponíveis:</textarea> 
+    </div>
+
+    <div class="block">
+      <h2>Mensagem Final:</h2>
+      <textarea id="input-msg-end">Qual das vagas acima deseja se candidatar?</textarea> 
+    </div>
+
+    <div class="block">
       <h2>Cole o HTML aqui:</h2>
-      <textarea id="inputHTML"> </textarea> 
+      <textarea id="inputHTML"></textarea> 
       <button onclick="extrairVagas()">GERAR</button>
     </div>
 
@@ -19,6 +29,7 @@
       <textarea id="mensagem" readonly></textarea>
       <button onclick="copiarTexto()">COPIAR</button>
     </div>
+
   </div>
 
 <script>
@@ -27,8 +38,11 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
+      const msgStart = document.getElementById('input-msg-start').value;
+      const msgEnd = document.getElementById('input-msg-end').value;
+
       const linhas = doc.querySelectorAll('tr.an-linha-grid');
-      let textoVagas = 'Antes de tudo, obrigado pelo interesse em se integrar à equipe, vagas disponíveis:\n\n';
+      let textoVagas = msgStart + '\n\n';
 
       let contador = 1;
 
@@ -45,7 +59,7 @@
         }
       });
 
-      textoVagas += '\nQual das vagas acima deseja se candidatar?';
+      textoVagas += '\n' + msgEnd;
       document.getElementById('mensagem').value = textoVagas;
     }
 
@@ -56,6 +70,7 @@
       navigator.clipboard.writeText(mensagem.value);
       alert('Texto copiado para a área de transferência!');
     }
-  </script>
+</script>
+
 </body>
 </html>
