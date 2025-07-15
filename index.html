@@ -63,6 +63,8 @@
         linhas.forEach(linha => {
             const colunas = linha.querySelectorAll('td');
 
+            
+
             const descricao = colunas[1]?.textContent.replace(/🔶/g, '').trim() || '';
             const numeroVagas = colunas[6]?.textContent.replace(/[^\d]/g, '') || '';
 
