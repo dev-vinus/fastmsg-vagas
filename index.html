@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Extrair Vagas</title>
+  <link rel="stylesheet" href="styles.css" /> <!-- Conectando o Style -->
+</head>
+<body>
+
+  <div class="container">
+    <div class="block">
+      <h2>Cole o HTML aqui:</h2>
+      <textarea id="inputHTML"> </textarea> 
+      <button onclick="extrairVagas()">GERAR</button>
+    </div>
+
+    <div class="block">
+      <h2>Vagas Formatadas:</h2>
+      <textarea id="mensagem" readonly></textarea>
+      <button onclick="copiarTexto()">COPIAR</button>
+    </div>
+  </div>
+
+<script>
+    function extrairVagas() {
+      const html = document.getElementById('inputHTML').value;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      const linhas = doc.querySelectorAll('tr.an-linha-grid');
+      let textoVagas = 'Antes de tudo, obrigado pelo interesse em se integrar à equipe, vagas disponíveis:\n\n';
+
+      let contador = 1;
+
+      linhas.forEach(linha => {
+        let descVaga = linha.querySelector('.an-coluna-DESVAG')?.textContent.trim() || '';
+        let numVagasRaw = linha.querySelector('.an-coluna-NUMVAG')?.textContent.trim() || '';
+
+        let numVagas = numVagasRaw.replace(/Qtd:\s*/i, '').replace(/[^\d]/g, '');
+        descVaga = descVaga.replace(/🔶/g, '').trim();
+
+        if (descVaga && numVagas !== '') {
+          textoVagas += `🔶 ${contador}. ${descVaga} (${numVagas})\n`;
+          contador++;
+        }
+      });
+
+      textoVagas += '\nQual das vagas acima deseja se candidatar?';
+      document.getElementById('mensagem').value = textoVagas;
+    }
+
+    function copiarTexto() {
+      const mensagem = document.getElementById('mensagem');
+      mensagem.select();
+      mensagem.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(mensagem.value);
+      alert('Texto copiado para a área de transferência!');
+    }
+  </script>
+</body>
+</html>
